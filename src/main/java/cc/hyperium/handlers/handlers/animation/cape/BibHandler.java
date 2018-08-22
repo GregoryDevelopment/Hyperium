@@ -212,7 +212,7 @@ public class BibHandler {
                         loadStaticCape(uuid, holder.optString("url"));
                         return;
                     } else if (!s.isEmpty()) {
-                        JsonHolder jsonHolder = PurchaseApi.getInstance().getCapeAtlas()
+                        JsonHolder jsonHolder = PurchaseApi.getInstance().getBibAtlas()
                                 .optJSONObject(s);
                         String url = jsonHolder.optString("url");
                         if (!url.isEmpty()) {
@@ -246,7 +246,7 @@ public class BibHandler {
     }
 
 
-    public void deleteCape(UUID id) {
+    public void deleteBib(UUID id) {
         this.bibs.remove(id);
     }
 

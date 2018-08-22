@@ -80,7 +80,7 @@ public class PurchaseApi {
         return instance;
     }
 
-    public JsonHolder getCapeAtlas() {
+    public JsonHolder getBibAtlas() {
         return capeAtlas;
     }
 
@@ -210,12 +210,12 @@ public class PurchaseApi {
     public void reload(UUID uuid) {
         if (uuid.equals(UUIDUtil.getClientUUID())) {
             refreshSelf();
-            Hyperium.INSTANCE.getHandlers().getBibHandler().deleteCape(uuid);
+            Hyperium.INSTANCE.getHandlers().getBibHandler().deleteBib(uuid);
         }
         System.out.println("reloading " + uuid);
         purchasePlayers.remove(uuid);
         getPackageSync(uuid);
-        Hyperium.INSTANCE.getHandlers().getBibHandler().deleteCape(uuid);
+        Hyperium.INSTANCE.getHandlers().getBibHandler().deleteBib(uuid);
 
 
     }

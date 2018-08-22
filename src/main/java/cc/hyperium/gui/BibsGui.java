@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
+public class BibsGui extends HyperiumGui implements GuiYesNoCallback {
 
     private Map<String, DynamicTexture> textures = new ConcurrentHashMap<>();
     private Map<String, BufferedImage> texturesImage = new ConcurrentHashMap<>();
@@ -42,7 +42,7 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
     private int purchaseIds = 0;
     private int initialGuiScale;
 
-    public CapesGui() {
+    public BibsGui() {
         initialGuiScale = Minecraft.getMinecraft().gameSettings.guiScale;
         // Adjust if GUI scale is on automatic.
         if(Minecraft.getMinecraft().gameSettings.guiScale == 0){
@@ -54,10 +54,10 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
         scollMultiplier = 2;
         updatePurchases();
         Multithreading.runAsync(() -> {
-            JsonHolder capeAtlas = PurchaseApi.getInstance().getCapeAtlas();
-            for (String s : capeAtlas.getKeys()) {
+            JsonHolder bibAtlas = PurchaseApi.getInstance().getBibAtlas();
+            for (String s : bibAtlas.getKeys()) {
                 Multithreading.runAsync(() -> {
-                    JsonHolder jsonHolder = capeAtlas.optJSONObject(s);
+                    JsonHolder jsonHolder = bibAtlas.optJSONObject(s);
                     try {
                         URL url = null;
                         url = new URL(jsonHolder.optString("url"));
@@ -98,7 +98,7 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
 
     @Override
     protected void pack(){
-        reg("RESET", new GuiButton(nextId(), 1, 1, "Disable Hyperium Cape"), guiButton -> {
+        reg("RESET", new GuiButton(nextId(), 1, 1, "Disable Hyperium Bib"), guiButton -> {
             NettyClient client = NettyClient.getClient();
             if (client != null) {
                 client.write(ServerCrossDataPacket.build(new JsonHolder().put("internal", true).put("set_cape", true).put("value", "default")));
@@ -113,15 +113,15 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
                 purchaseSettings.put("cape", new JsonHolder());
             }
             purchaseSettings.optJSONObject("cape").put("type", "default");
-            Hyperium.INSTANCE.getHandlers().getBibHandler().deleteCape(UUIDUtil.getClientUUID());
+            Hyperium.INSTANCE.getHandlers().getBibHandler().deleteBib(UUIDUtil.getClientUUID());
         }, guiButton -> {
 
         });
-        reg("CUSTOM", new GuiButton(nextId(), 1, 22, "Custom Cape"), guiButton -> {
+        reg("CUSTOM", new GuiButton(nextId(), 1, 22, "Custom Bib"), guiButton -> {
             Desktop desktop = Desktop.getDesktop();
             if (desktop != null) {
                 try {
-                    desktop.browse(new URL("https://capes.hyperium.cc").toURI());
+                    desktop.browse(new URL("https://bibs.hyperium.cc").toURI());
                 } catch (IOException | URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -156,15 +156,15 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
             if (blocksPerLine % 2 == 1) {
                 blocksPerLine--;
             }
-            JsonHolder capeAtlas = PurchaseApi.getInstance().getCapeAtlas();
+            JsonHolder bibAtlas = PurchaseApi.getInstance().getBibAtlas();
 
 
-            int totalRows = (int) (capeAtlas.getKeys().size() / blocksPerLine + (capeAtlas.getKeys().size() % blocksPerLine == 0 ? 0 : 1));
+            int totalRows = (int) (bibAtlas.getKeys().size() / blocksPerLine + (bibAtlas.getKeys().size() % blocksPerLine == 0 ? 0 : 1));
             int row = 0;
             int pos = 1;
             int printY = 15 - offset;
             GlStateManager.scale(2F, 2F, 2F);
-            fontRendererObj.drawString("Capes", (current.getScaledWidth() / 2 - fontRendererObj.getStringWidth("Capes")) / 2, printY / 2, new Color(249, 99, 0).getRGB(), true);
+            fontRendererObj.drawString("Bibs", (current.getScaledWidth() / 2 - fontRendererObj.getStringWidth("Bibs")) / 2, printY / 2, new Color(249, 99, 0).getRGB(), true);
             String s1;
             try {
                  s1 = PurchaseApi.getInstance().getSelf().getPurchaseSettings()
@@ -172,10 +172,10 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
             } catch (NullPointerException e){
                 return;
             }
-            String s2 = capeAtlas.optJSONObject(s1).optString("name");
+            String s2 = bibAtlas.optJSONObject(s1).optString("name");
             if (s2.isEmpty())
                 s2 = "NONE";
-            String text = "Active Cape: " + s2;
+            String text = "Active Bib: " + s2;
             fontRendererObj.drawString(text, (current.getScaledWidth() / 2 - fontRendererObj.getStringWidth(text)) / 2, (printY + 20) / 2, new Color(249, 99, 0).getRGB(), true);
             text = "Need more credits? Click here";
             int stringWidth1 = fontRendererObj.getStringWidth(text);
@@ -200,9 +200,9 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
             printY += 35;
             int scaledWidth = current.getScaledWidth();
             RenderUtils.drawSmoothRect(scaledWidth / 2 - (blockWidth + 16) * blocksPerLine / 2, printY - 4, scaledWidth / 2 + (blockWidth + 16) * blocksPerLine / 2, printY + (blockHeight + 16) * totalRows + 4, new Color(53, 106, 110).getRGB());
-            for (String s : capeAtlas.getKeys()) {
-                JsonHolder cape = capeAtlas.optJSONObject(s);
-                if (cape.optBoolean("private")) {
+            for (String s : bibAtlas.getKeys()) {
+                JsonHolder bib = bibAtlas.optJSONObject(s);
+                if (bib.optBoolean("private")) {
                     continue;
                 }
                 if (pos > blocksPerLine) {
@@ -219,21 +219,21 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
                     int imgW = 120;
                     int imgH = 128;
                     GlStateManager.bindTexture(dynamicTexture.getGlTextureId());
-                    float capeScale = .75F;
-                    int topLeftX = (int) (thisBlocksCenter - imgW / (2F / capeScale));
+                    float bibScale = .75F;
+                    int topLeftX = (int) (thisBlocksCenter - imgW / (2F / bibScale));
                     int topLeftY = thisTopY + 4;
                     GlStateManager.translate(topLeftX, topLeftY, 0);
-                    GlStateManager.scale(capeScale, capeScale, capeScale);
+                    GlStateManager.scale(bibScale, bibScale, bibScale);
                     drawTexturedModalRect(0, 0, imgW / 12, 0, imgW, imgH * 2);
-                    GlStateManager.scale(1F / capeScale, 1F / capeScale, 1F / capeScale);
+                    GlStateManager.scale(1F / bibScale, 1F / bibScale, 1F / bibScale);
                     GlStateManager.translate(-topLeftX, -topLeftY, 0);
                 }
 
 
-                String nameCape = cape.optString("name");
+                String nameBib = bib.optString("name");
                 GlStateManager.scale(2F, 2F, 2F);
-                int x = thisBlocksCenter - fontRendererObj.getStringWidth(nameCape);
-                fontRendererObj.drawString(nameCape, x / 2, (thisTopY - 8 + blockHeight / 2 + 64 + 16) / 2, new Color(249, 99, 0).getRGB(), true);
+                int x = thisBlocksCenter - fontRendererObj.getStringWidth(nameBib);
+                fontRendererObj.drawString(nameBib, x / 2, (thisTopY - 8 + blockHeight / 2 + 64 + 16) / 2, new Color(249, 99, 0).getRGB(), true);
                 GlStateManager.scale(.5F, .5F, .5F);
 
                 if (cosmeticCallback.getKeys().size() == 0 || purchasing) {
@@ -283,7 +283,7 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
                                 }
                                 //assume this is enough time
                                 PurchaseApi.getInstance().refreshSelf();
-                                Hyperium.INSTANCE.getHandlers().getBibHandler().deleteCape(UUIDUtil.getClientUUID());
+                                Hyperium.INSTANCE.getHandlers().getBibHandler().deleteBib(UUIDUtil.getClientUUID());
                             });
                         });
                         GlStateManager.scale(2F, 2F, 2F);

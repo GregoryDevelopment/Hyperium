@@ -1,6 +1,6 @@
 package cc.hyperium.gui.main.tabs;
 
-import cc.hyperium.gui.CapesGui;
+import cc.hyperium.gui.BibsGui;
 import cc.hyperium.gui.GuiBlock;
 import cc.hyperium.gui.Icons;
 import cc.hyperium.gui.ParticleGui;
@@ -47,7 +47,7 @@ public class CosmeticsTab extends AbstractTab implements GuiYesNoCallback {
         block = new GuiBlock(0, w, y, y + w);
         this.y = y;
         this.w = w;
-        items.add(new SettingItem(() -> new CapesGui().show(), Icons.COSMETIC.getResource(), "Capes", "Browse and select Hyperium Capes", "Click to open", 0, 0));
+        items.add(new SettingItem(() -> new BibsGui().show(), Icons.COSMETIC.getResource(), "Capes", "Browse and select Hyperium Capes", "Click to open", 0, 0));
 
         credits = new SettingItem(() -> {
             Desktop desktop = Desktop.getDesktop();
