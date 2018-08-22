@@ -5,10 +5,10 @@ import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 
-public class StaticCape implements ICape {
+public class StaticBib implements IBib {
     private ResourceLocation location;
 
-    public StaticCape(ResourceLocation location) {
+    public StaticBib(ResourceLocation location) {
         this.location = location;
     }
 

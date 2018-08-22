@@ -113,7 +113,7 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
                 purchaseSettings.put("cape", new JsonHolder());
             }
             purchaseSettings.optJSONObject("cape").put("type", "default");
-            Hyperium.INSTANCE.getHandlers().getCapeHandler().deleteCape(UUIDUtil.getClientUUID());
+            Hyperium.INSTANCE.getHandlers().getBibHandler().deleteCape(UUIDUtil.getClientUUID());
         }, guiButton -> {
 
         });
@@ -283,7 +283,7 @@ public class CapesGui extends HyperiumGui implements GuiYesNoCallback {
                                 }
                                 //assume this is enough time
                                 PurchaseApi.getInstance().refreshSelf();
-                                Hyperium.INSTANCE.getHandlers().getCapeHandler().deleteCape(UUIDUtil.getClientUUID());
+                                Hyperium.INSTANCE.getHandlers().getBibHandler().deleteCape(UUIDUtil.getClientUUID());
                             });
                         });
                         GlStateManager.scale(2F, 2F, 2F);

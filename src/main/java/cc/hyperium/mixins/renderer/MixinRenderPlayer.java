@@ -18,6 +18,7 @@
 package cc.hyperium.mixins.renderer;
 
 import cc.hyperium.mixinsimp.renderer.HyperiumRenderPlayer;
+import cc.hyperium.mixinsimp.renderer.layers.LayerBib;
 import cc.hyperium.mixinsimp.renderer.layers.TwoPartLayerBipedArmor;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
@@ -41,6 +42,11 @@ public abstract class MixinRenderPlayer extends RendererLivingEntity<AbstractCli
 
     public MixinRenderPlayer(RenderManager renderManagerIn, ModelBase modelBaseIn, float shadowSizeIn) {
         super(renderManagerIn, modelBaseIn, shadowSizeIn);
+    }
+
+    @Inject(method = "<init>(Lnet/minecraft/client/renderer/entity/RenderManager;Z)V", at = @At("RETURN"))
+    public void injectLayers(RenderManager renderManager, boolean useSmallArms, CallbackInfo info) {
+        addLayer(new LayerBib((RenderPlayer)(Object)this));
     }
 
     @Shadow

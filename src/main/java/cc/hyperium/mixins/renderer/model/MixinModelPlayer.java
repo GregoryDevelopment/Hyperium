@@ -52,8 +52,24 @@ public class MixinModelPlayer extends MixinModelBiped implements IMixinModelPlay
     private ModelRenderer bipedRightForeArm_adjArmwear;
     private ModelRenderer bipedLeftForeArm_adjArmwear;
 
+    private ModelRenderer modelBib;
+
+    @Override
+    public ModelRenderer getBib() {
+        return modelBib;
+    }
+
+    public void renderBib(float p_178728_1_)
+    {
+        this.modelBib.render(p_178728_1_);
+    }
+
     @Inject(method = "<init>", at = @At("RETURN"))
     private void injectModelChanges(float modelSize, boolean useSmallArms, CallbackInfo ci) {
+        this.modelBib = new ModelRenderer(this, 0, 0);
+        this.modelBib.setTextureSize(64, 32);
+        this.modelBib.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
+
         if (useSmallArms) {
             this.bipedLeftArm = new ModelRenderer(this, 32, 48);
             this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 3, 6, 4, modelSize);

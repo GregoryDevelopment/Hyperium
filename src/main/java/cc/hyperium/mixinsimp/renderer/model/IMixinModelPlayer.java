@@ -48,4 +48,8 @@ public interface IMixinModelPlayer extends IMixinModelBiped {
     ModelRenderer getBipedRightForeArm_adjArmwear();
 
     ModelRenderer getBipedLeftForeArm_adjArmwear();
+
+    ModelRenderer getBib();
+
+    void renderBib(float scale);
 }

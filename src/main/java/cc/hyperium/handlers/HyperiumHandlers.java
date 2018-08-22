@@ -42,7 +42,7 @@ import cc.hyperium.handlers.handlers.animation.DabHandler;
 import cc.hyperium.handlers.handlers.animation.FlossDanceHandler;
 import cc.hyperium.handlers.handlers.animation.TPoseHandler;
 import cc.hyperium.handlers.handlers.animation.TwerkDance;
-import cc.hyperium.handlers.handlers.animation.cape.CapeHandler;
+import cc.hyperium.handlers.handlers.animation.cape.BibHandler;
 import cc.hyperium.handlers.handlers.animation.fortnite.FortniteDefaultDance;
 import cc.hyperium.handlers.handlers.animation.fortnite.FortniteHypeDance;
 import cc.hyperium.handlers.handlers.chat.AutoWhoChatHandler;
@@ -79,7 +79,7 @@ public class HyperiumHandlers {
     private LocationHandler locationHandler;
     private HypixelDetector hypixelDetector;
     private CommandQueue commandQueue;
-    private CapeHandler capeHandler;
+    private BibHandler bibHandler;
     private ValueHandler valueHandler;
     private List<HyperiumChatHandler> chatHandlers;
     private GeneralChatHandler generalChatHandler;
@@ -132,7 +132,7 @@ public class HyperiumHandlers {
 
         register(renderPlayerAsBlock = new RenderPlayerAsBlock());
         register(resolutionUtil = new ResolutionUtil());
-        register(capeHandler = new CapeHandler());
+        register(bibHandler = new BibHandler());
         register(guiDisplayHandler = new GuiDisplayHandler());
         register(scoreboardRenderer = new ScoreboardRenderer());
         register(dataTracking = new GameDataTracking());
@@ -308,8 +308,8 @@ public class HyperiumHandlers {
         return flossDanceHandler;
     }
 
-    public CapeHandler getCapeHandler() {
-        return capeHandler;
+    public BibHandler getBibHandler() {
+        return bibHandler;
     }
 
     public StatusHandler getStatusHandler() {

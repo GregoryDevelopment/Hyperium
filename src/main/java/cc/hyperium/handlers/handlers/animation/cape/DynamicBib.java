@@ -6,7 +6,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
-public class DynamicCape implements ICape {
+public class DynamicBib implements IBib {
 
 
     private List<ResourceLocation> locations;
@@ -15,7 +15,7 @@ public class DynamicCape implements ICape {
     private int frame;
     private int totalms;
 
-    public DynamicCape(List<ResourceLocation> locations, int delay, int totalFrames) {
+    public DynamicBib(List<ResourceLocation> locations, int delay, int totalFrames) {
         this.locations = locations;
         this.delay = delay;
         this.totalFrames = totalFrames;

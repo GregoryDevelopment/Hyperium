@@ -53,13 +53,6 @@ public abstract class MixinAbstractClientPlayer extends EntityPlayer {
         hyperiumAbstractClientPlayer.init();
     }
 
-    /**
-     * @author
-     */
-    @Overwrite
-    public ResourceLocation getLocationCape() {
-        return hyperiumAbstractClientPlayer.getLocationCape();
-    }
 
     @Inject(method = "getFovModifier", at = @At("HEAD"), cancellable = true)
     private void getFovModifier(CallbackInfoReturnable<Float> ci) {

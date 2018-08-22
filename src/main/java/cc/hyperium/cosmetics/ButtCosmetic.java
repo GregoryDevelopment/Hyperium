@@ -1,6 +1,5 @@
 package cc.hyperium.cosmetics;
 
-import cc.hyperium.Hyperium;
 import cc.hyperium.event.InvokeEvent;
 import cc.hyperium.event.PreCopyPlayerModelAnglesEvent;
 import cc.hyperium.event.Priority;

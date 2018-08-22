@@ -186,16 +186,16 @@ public class HyperiumAbstractClientPlayer {
     }
 
     public void init(){
-        Hyperium.INSTANCE.getHandlers().getCapeHandler().getCape(parent);
+        Hyperium.INSTANCE.getHandlers().getBibHandler().getBib(parent);
     }
 
-    public ResourceLocation getLocationCape(){
-        ResourceLocation cape = Hyperium.INSTANCE.getHandlers().getCapeHandler().getCape(parent);
+/*    public ResourceLocation getLocationCape(){
+        ResourceLocation cape = Hyperium.INSTANCE.getHandlers().getBibHandler().getBib(parent);
         if (cape != null)
             return cape;
         NetworkPlayerInfo networkplayerinfo = ((IMixinAbstractClientPlayer) parent).callGetPlayerInfo();
         return networkplayerinfo == null ? null : networkplayerinfo.getLocationCape();
-    }
+    }*/
 
     public void getFovModifier(CallbackInfoReturnable<Float> ci){
         if (Settings.STATIC_FOV) {

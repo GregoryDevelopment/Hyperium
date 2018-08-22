@@ -37,17 +37,17 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class CapeHandler {
+public class BibHandler {
 
     public static final ReentrantLock LOCK = new ReentrantLock();
-    private final ConcurrentHashMap<UUID, ICape> capes = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, IBib> bibs = new ConcurrentHashMap<>();
     private final ResourceLocation loadingResource = new ResourceLocation("");
     private final File CACHE_DIR;
     private ConcurrentLinkedQueue<Runnable> actions = new ConcurrentLinkedQueue<>();
     private SharedDrawable drawable;
 
 
-    public CapeHandler() {
+    public BibHandler() {
         try {
             drawable = new SharedDrawable(Display.getDrawable());
 
@@ -63,30 +63,31 @@ public class CapeHandler {
     @InvokeEvent
     public void worldSwap(WorldChangeEvent event) {
         UUID id = UUIDUtil.getClientUUID();
-        ICape selfCape = id == null ? null : capes.get(id);
+        IBib selfCape = id == null ? null : bibs.get(id);
         try {
             LOCK.lock();
 
-            for (ICape cape : capes.values()) {
+            for (IBib cape : bibs.values()) {
                 if (selfCape != null && selfCape.equals(cape))
                     continue;
                 cape.delete(Minecraft.getMinecraft().getTextureManager());
             }
-            capes.clear();
+            bibs.clear();
             if (selfCape != null)
-                capes.put(id, selfCape);
+                bibs.put(id, selfCape);
         } finally {
             LOCK.unlock();
         }
     }
 
     public void loadStaticCape(final UUID uuid, String url) {
-        if (capes.get(uuid) != null && !capes.get(uuid).equals(NullCape.INSTANCE))
+        System.out.println("Fetching " + url);
+        if (bibs.get(uuid) != null && !bibs.get(uuid).equals(NullBib.INSTANCE))
             return;
-        capes.put(uuid, NullCape.INSTANCE);
+        bibs.put(uuid, NullBib.INSTANCE);
 
         ResourceLocation resourceLocation = new ResourceLocation(
-                String.format("hyperium/capes/%s.png", System.nanoTime())
+                String.format("hyperium/bibs/%s.png", System.nanoTime())
         );
 
         TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
@@ -99,7 +100,7 @@ public class CapeHandler {
 
             @Override
             public void skinAvailable() {
-                CapeHandler.this.setCape(uuid, new StaticCape(resourceLocation));
+                BibHandler.this.setBib(uuid, new StaticBib(resourceLocation));
             }
         });
         try {
@@ -112,17 +113,17 @@ public class CapeHandler {
         }
     }
 
-    public void setCape(UUID uuid, ICape cape) {
-        capes.put(uuid, cape);
+    public void setBib(UUID uuid, IBib cape) {
+        bibs.put(uuid, cape);
     }
 
-    public synchronized void loadDynamicCape(final UUID uuid, String url) throws IOException, ExecutionException, InterruptedException {
-        if (capes.get(uuid) != null && !capes.get(uuid).equals(NullCape.INSTANCE))
+    public synchronized void loadDynamicBib(final UUID uuid, String url) throws IOException, ExecutionException, InterruptedException {
+        if (bibs.get(uuid) != null && !bibs.get(uuid).equals(NullBib.INSTANCE))
             return;
-        capes.put(uuid, NullCape.INSTANCE);
+        bibs.put(uuid, NullBib.INSTANCE);
 
         File file = new File(CACHE_DIR, uuid.toString());
-        JsonHolder holder = Utils.get("https://api.hyperium.cc/cape/" + uuid.toString());
+        JsonHolder holder = Utils.get("https://api.hyperium.cc/bibs/" + uuid.toString());
 
         file.mkdirs();
         File file1 = new File(file, "cache.txt");
@@ -171,7 +172,7 @@ public class CapeHandler {
 
 
             int finalImg = img;
-            setCape(uuid, new DynamicCape(locations, holder.optInt("delay"), finalImg));
+            setBib(uuid, new DynamicBib(locations, holder.optInt("delay"), finalImg));
         } catch (LWJGLException e) {
             e.printStackTrace();
         } finally {
@@ -185,13 +186,13 @@ public class CapeHandler {
     }
 
 
-    public ResourceLocation getCape(final AbstractClientPlayer player) {
+    public ResourceLocation getBib(final AbstractClientPlayer player) {
         UUID uuid = player.getUniqueID();
 
         if (isRealPlayer(uuid)) {
-            ICape cape = capes.getOrDefault(uuid, null);
+            IBib cape = bibs.getOrDefault(uuid, null);
             if (cape == null) {
-                setCape(player.getUniqueID(), NullCape.INSTANCE);
+                setBib(player.getUniqueID(), NullBib.INSTANCE);
                 Multithreading.runAsync(() -> {
                     HyperiumPurchase hyperiumPurchase = PurchaseApi.getInstance()
                             .getPackageSync(uuid);
@@ -201,7 +202,7 @@ public class CapeHandler {
                         String url = holder.optString("url");
                         if (!url.isEmpty()) {
                             try {
-                                loadDynamicCape(uuid, url);
+                                loadDynamicBib(uuid, url);
                             } catch (IOException | ExecutionException | InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -220,13 +221,13 @@ public class CapeHandler {
                         }
                     }
                     loadStaticCape(uuid,
-                            "http://s.optifine.net/capes/" + player.getGameProfile().getName()
+                            "http://s.optifine.net/bibs/" + player.getGameProfile().getName()
                                     + ".png");
                 });
-                return capes.getOrDefault(uuid, NullCape.INSTANCE).get();
+                return bibs.getOrDefault(uuid, NullBib.INSTANCE).get();
             }
 
-            if (cape.equals(NullCape.INSTANCE)) {
+            if (cape.equals(NullBib.INSTANCE)) {
                 return null;
             }
             return cape.get();
@@ -246,7 +247,7 @@ public class CapeHandler {
 
 
     public void deleteCape(UUID id) {
-        this.capes.remove(id);
+        this.bibs.remove(id);
     }
 
     private void unzip(String zipFilePath, String destDir) {

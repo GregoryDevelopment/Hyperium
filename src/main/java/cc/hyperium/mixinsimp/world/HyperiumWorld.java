@@ -101,8 +101,8 @@ public class HyperiumWorld {
 //                }
 //                ResourceLocation locationCape = ((AbstractClientPlayer) entity).getLocationCape();
 //                if (locationCape != null) {
-//                    CapeHandler capeHandler = Hyperium.INSTANCE.getHandlers().getCapeHandler();
-//                    ResourceLocation cape = capeHandler.getCape(((AbstractClientPlayer) entity));
+//                    BibHandler capeHandler = Hyperium.INSTANCE.getHandlers().getBibHandler();
+//                    ResourceLocation cape = capeHandler.getBib(((AbstractClientPlayer) entity));
 //                    if (cape != null && cape.equals(locationCape))
 //                        return;
 //                    Minecraft.getMinecraft().getTextureManager().deleteTexture(locationCape);

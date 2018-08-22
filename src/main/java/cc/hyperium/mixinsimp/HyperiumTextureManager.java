@@ -5,7 +5,7 @@ import cc.hyperium.config.Settings;
 import cc.hyperium.event.EventBus;
 import cc.hyperium.event.InvokeEvent;
 import cc.hyperium.event.WorldChangeEvent;
-import cc.hyperium.handlers.handlers.animation.cape.CapeHandler;
+import cc.hyperium.handlers.handlers.animation.cape.BibHandler;
 import cc.hyperium.mixins.entity.IMixinAbstractClientPlayer;
 import cc.hyperium.mixins.entity.IMixinNetworkPlayerInfo;
 import cc.hyperium.utils.Utils;
@@ -57,7 +57,7 @@ public class HyperiumTextureManager {
     }
 
     public void onResourceManagerReload(IResourceManager resourceManager) {
-        CapeHandler.LOCK.lock();
+        BibHandler.LOCK.lock();
         try {
             for (Map.Entry<String, ITextureObject> entry : textures.entrySet()) {
                 String key = entry.getKey();
@@ -72,7 +72,7 @@ public class HyperiumTextureManager {
         } catch (Exception e) {
 
         } finally {
-            CapeHandler.LOCK.unlock();
+            BibHandler.LOCK.unlock();
         }
     }
 
@@ -172,10 +172,10 @@ public class HyperiumTextureManager {
                         ResourceLocation locationCape = ((AbstractClientPlayer) playerEntity)
                             .getLocationCape();
                         if (locationCape != null) {
-                            CapeHandler capeHandler = Hyperium.INSTANCE.getHandlers()
-                                .getCapeHandler();
-                            ResourceLocation cape = capeHandler
-                                .getCape(((AbstractClientPlayer) playerEntity));
+                            BibHandler bibHandler = Hyperium.INSTANCE.getHandlers()
+                                .getBibHandler();
+                            ResourceLocation cape = bibHandler
+                                .getBib(((AbstractClientPlayer) playerEntity));
                             if (cape != null && cape.equals(locationCape))
                                 continue;
                             deleteTexture(locationCape);
